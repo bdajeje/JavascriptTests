@@ -1,3 +1,4 @@
+/* Clock model */
 function Clock(x, y, radius)
 {
   this.x                      = x;
@@ -5,12 +6,34 @@ function Clock(x, y, radius)
   this.radius                 = radius;
   this.background_color       = "#000";
   this.middle_color           = "#EEE";
+  this.internal_radius        = 20; // Radius for the internal circle
+
   this.needle_hours_width     = 3;
   this.needle_minutes_width   = 2;
   this.needle_seconds_width   = 1;
   this.needle_hours_color     = "#EEE";
   this.needle_minutes_color   = "#FFF";
   this.needle_seconds_color   = "#DDD";
+
+  this.numbers_pos            = [];
+  this.number_font            = "Arial";
+  this.number_size            = 20; // In pixels
+  this.number_style           = this.number_size + "px " + this.number_font;
+  this.number_offset          = 20; // Offset between number pos and clock border (radius)
+
+  // Calculate clock numbers right now to prevent re-calculate then
+  var angle         = -Math.PI/2;
+  var step          = (2 * Math.PI) / 12;
+  var number_radius = radius - this.number_offset;
+  for(var i = 0; i < 12; ++i)
+  {
+    number_x = x - (this.number_size/2) + xTrigonometricPosition(number_radius, angle);
+    number_y = y + (this.number_size/2) + yTrigonometricPosition(number_radius, angle);
+
+    this.numbers_pos[i] = new Position(number_x, number_y);
+
+    angle += step;
+  }
 }
 
 function getClockCanvas()
@@ -23,13 +46,22 @@ function drawNeedles(context, clock, hours, minutes, seconds)
   print(hours + "-" + minutes + "-" + seconds);
 
   // Draw hours needle
-  drawLine(context, clock.x, clock.y, clock.x + clock.radius, clock.y, clock.needle_hours_width, clock.needle_hours_color);
+  drawLine(context, clock.x, clock.y,
+           clock.x + xTrigonometricPosition(clock.radius, Math.PI/2),
+           clock.y + yTrigonometricPosition(clock.radius, Math.PI/2),
+           clock.needle_hours_width, clock.needle_hours_color);
 
   // Draw minutes needle
-  drawLine(context, clock.x, clock.y, clock.x + clock.radius, clock.y + 50, clock.needle_minutes_width, clock.needle_minutes_color);
+  drawLine(context, clock.x, clock.y,
+           clock.x + xTrigonometricPosition(clock.radius, Math.PI/3),
+           clock.y + yTrigonometricPosition(clock.radius, Math.PI/3),
+           clock.needle_minutes_width, clock.needle_minutes_color);
 
   // Draw seconds needle
-  drawLine(context, clock.x, clock.y, clock.x + clock.radius, clock.y - 100, clock.needle_seconds_width, clock.needle_seconds_color);
+  drawLine(context, clock.x, clock.y,
+           clock.x + xTrigonometricPosition(clock.radius, Math.PI),
+           clock.y + yTrigonometricPosition(clock.radius, Math.PI),
+           clock.needle_seconds_width, clock.needle_seconds_color);
 }
 
 /* Draw the clock
@@ -41,18 +73,11 @@ function drawClock(context, clock, hours, minutes, seconds)
   drawCircle(context, clock.x, clock.y, clock.radius, 0, 360, clock.background_color, true);
 
   // Draw clock middle
-  drawCircle(context, clock.x, clock.y, clock.radius/20, 0, 360, clock.middle_color, true);
+  drawCircle(context, clock.x, clock.y, clock.radius/clock.internal_radius, 0, 360, clock.middle_color, true);
 
   // Draw numbers
-  // var angle = 0;
-  // var step  = (2 * Math.PI) / 12;
-  // for(var i = 0; i < 12; ++i)
-  // {
-  //   x = clock.radius / Math.sin(angle);
-  //   y = x * Math.cos(angle);
-  //   drawText(context, i.toString(), x, y, "20px Arial");
-  //   angle += step;
-  // }
+  for(var i = 0; i < 12; ++i)
+    drawText(context, i.toString(), clock.numbers_pos[i].x, clock.numbers_pos[i].y, clock.number_style);
 
   drawNeedles(context, clock, hours, minutes, seconds);
 }
@@ -78,3 +103,4 @@ function clock(context)
     drawClock(context, clock, date.getHours(), date.getMinutes(), date.getSeconds());
   }, 1000);
 }
+
