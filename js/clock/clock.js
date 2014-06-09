@@ -4,16 +4,16 @@ function Clock(x, y, radius)
   this.x                      = x;
   this.y                      = y;
   this.radius                 = radius;
-  this.background_color       = "#000";
-  this.middle_color           = "#EEE";
+  this.background_color       = "#EEE";
+  this.middle_color           = "#111";
   this.internal_radius        = 20; // Radius for the internal circle
 
   this.needle_hours_width     = 3;
   this.needle_minutes_width   = 2;
   this.needle_seconds_width   = 1;
-  this.needle_hours_color     = "#EEE";
-  this.needle_minutes_color   = "#FFF";
-  this.needle_seconds_color   = "#DDD";
+  this.needle_hours_color     = "#AAA";
+  this.needle_minutes_color   = "#BBB";
+  this.needle_seconds_color   = "#CCC";
   this.needle_hours_radius    = radius - radius*0.1;
   this.needle_minutes_radius  = radius - radius*0.2;
   this.needle_seconds_radius  = radius - radius*0.3;
@@ -39,20 +39,20 @@ function Clock(x, y, radius)
   }
 }
 
-function getClockCanvas()
-{
-  return document.getElementById("clock");
-}
-
 function drawNeedles(context, clock, hours, minutes, seconds)
 {
-  print(hours + "-" + minutes + "-" + seconds);
-
   // Hours to angle in radian
   var start = Math.PI/2;
   var hours_angle   = ((hours * 2 * Math.PI) / 12) - start;
   var minutes_angle = ((minutes * 2 * Math.PI) / 60) - start;
   var seconds_angle = ((seconds * 2 * Math.PI) / 60) - start;
+
+  // Applying shadows
+  context.save();
+  context.shadowColor   = "#000";
+  context.shadowBlur    = 1;
+  context.shadowOffsetX = 1;
+  context.shadowOffsetY = 1;
 
   // Draw hours needle
   drawLine(context, clock.x, clock.y,
@@ -71,6 +71,8 @@ function drawNeedles(context, clock, hours, minutes, seconds)
            clock.x + xTrigonometricPosition(clock.needle_seconds_radius, seconds_angle),
            clock.y + yTrigonometricPosition(clock.needle_seconds_radius, seconds_angle),
            clock.needle_seconds_width, clock.needle_seconds_color);
+
+  context.restore();
 }
 
 /* Draw the clock

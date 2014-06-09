@@ -43,3 +43,22 @@ function drawCircle(context, x, y, radius, start_angle, end_angle, fill_color, c
   context.arc(x, y, radius, start_angle_radian, end_angle_radian, clock_wise);
   context.fill();
 }
+
+function drawRectangle(context, x, y, width, height, color)
+{
+  context.beginPath();
+  context.fillStyle = color;
+  context.fillRect( x, y, width, height );
+  context.fill();
+}
+
+function drawSquare(context, x, y, width, height, line_width, color)
+{
+  var right_x    = x + width;
+  var bottom_y   = y + height;
+
+  drawLine(context, x, y, right_x, y, line_width, color);
+  drawLine(context, right_x, y, right_x, bottom_y, line_width, color);
+  drawLine(context, right_x, bottom_y, x, bottom_y, line_width, color);
+  drawLine(context, x, bottom_y, x, y, line_width, color);
+}
