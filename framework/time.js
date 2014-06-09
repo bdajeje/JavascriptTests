@@ -1,3 +1,4 @@
+/* Get current time */
 function getTime()
 {
   return new Date().getTime();
@@ -5,5 +6,5 @@ function getTime()
 
 function getTimeSeconds()
 {
-  return new getTime / 1000;
+  return getTime() / 1000;
 }

@@ -14,6 +14,9 @@ function Clock(x, y, radius)
   this.needle_hours_color     = "#EEE";
   this.needle_minutes_color   = "#FFF";
   this.needle_seconds_color   = "#DDD";
+  this.needle_hours_radius    = radius - radius*0.1;
+  this.needle_minutes_radius  = radius - radius*0.2;
+  this.needle_seconds_radius  = radius - radius*0.3;
 
   this.numbers_pos            = [];
   this.number_font            = "Arial";
@@ -53,20 +56,20 @@ function drawNeedles(context, clock, hours, minutes, seconds)
 
   // Draw hours needle
   drawLine(context, clock.x, clock.y,
-           clock.x + xTrigonometricPosition(clock.radius, hours_angle),
-           clock.y + yTrigonometricPosition(clock.radius, hours_angle),
+           clock.x + xTrigonometricPosition(clock.needle_hours_radius, hours_angle),
+           clock.y + yTrigonometricPosition(clock.needle_hours_radius, hours_angle),
            clock.needle_hours_width, clock.needle_hours_color);
 
   // Draw minutes needle
   drawLine(context, clock.x, clock.y,
-           clock.x + xTrigonometricPosition(clock.radius, minutes_angle),
-           clock.y + yTrigonometricPosition(clock.radius, minutes_angle),
+           clock.x + xTrigonometricPosition(clock.needle_minutes_radius, minutes_angle),
+           clock.y + yTrigonometricPosition(clock.needle_minutes_radius, minutes_angle),
            clock.needle_minutes_width, clock.needle_minutes_color);
 
   // Draw seconds needle
   drawLine(context, clock.x, clock.y,
-           clock.x + xTrigonometricPosition(clock.radius, seconds_angle),
-           clock.y + yTrigonometricPosition(clock.radius, seconds_angle),
+           clock.x + xTrigonometricPosition(clock.needle_seconds_radius, seconds_angle),
+           clock.y + yTrigonometricPosition(clock.needle_seconds_radius, seconds_angle),
            clock.needle_seconds_width, clock.needle_seconds_color);
 }
 
@@ -88,30 +91,40 @@ function drawClock(context, clock, hours, minutes, seconds)
   drawNeedles(context, clock, hours, minutes, seconds);
 }
 
+/* Specific get time function for this clock
+ * The function returns hours between 0 and 12
+ * \return array [hours, minutes, seconds]
+ */
+function getClockTime()
+{
+  var date = new Date;
+  date.setTime( getTime() );
+
+  // Always give hours between 0 and 12
+  var hours = date.getHours();
+  if(hours > 12)
+    hours -= 12;
+
+  return [hours, date.getMinutes(), date.getSeconds()];
+}
+
 /* Main function to start rendering the clock
  * \param context used to draw
  */
 function clock(context)
 {
   // Create the Clock object
-  var clock = new Clock(150, 150, 100);
+  var clock = new Clock(100, 100, 100);
 
-// First draw before interval draw every seconds
-  drawClock(context, clock, 0, 0, 0);
+  // First draw before interval draw every seconds
+  var current_time = getClockTime();
+  drawClock(context, clock, current_time[0], current_time[1], current_time[2]);
 
   // Update clock every second
   window.setInterval(function()
   {
-    // Get current time
-    var date = new Date;
-    date.setTime( getTime() );
-
-    // Always give hours between 0 and 12
-    var hours = date.getHours();
-    if(hours > 12)
-      hours -= 12;
-
-    drawClock(context, clock, hours, date.getMinutes(), date.getSeconds());
+    var current_time = getClockTime();
+    drawClock(context, clock, current_time[0], current_time[1], current_time[2]);
   }, 1000);
 }
 
