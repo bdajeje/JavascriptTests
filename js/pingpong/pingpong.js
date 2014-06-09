@@ -33,6 +33,7 @@ function Ball(radius, color)
   this.y      = 0;
   this.radius = radius;
   this.color  = color;
+  this.speed  = 5; // Number of pixels/sec
 
   // \todo Make this function common with Player model
   this.Move = function(x, y)
@@ -70,6 +71,11 @@ function draw(context, game, player1, player2, ball)
 
 /****** OTHERS ******/
 
+function gameIteration(time_difference, game, player1, player2, ball)
+{
+ // update ball position by time_difference * ball.speed
+}
+
 /* Main function to start rendering Ping Pong
  * \param context used to draw
  */
@@ -92,9 +98,24 @@ function pingpong(context, width, height)
   var players_start_x = (width - player1.width) / 2;
   player1.Move(players_start_x, game.player_offset);
   player2.Move(players_start_x, game.height - game.player_offset - player2.bar_height);
-
   ball.Move(width / 2, height / 2);
 
-  draw(context, game, player1, player2, ball);
+  // Start game loop
+  var sleep_time = 1000 / 60; // 60 is the number of wanted fps
+  var last_date  = new Date;
+  window.setInterval(function()
+  {
+    // Get time spend between last iteration and this one
+    var current_date    = new Date;
+    var time_difference = current_date - last_date;
+    last_date = current_date;
+
+    // Update game depending on time
+    gameIteration(time_difference, game, player1, player2, ball);
+
+    // Draw everything
+    draw(context, game, player1, player2, ball);
+
+  }, sleep_time);
 }
 
