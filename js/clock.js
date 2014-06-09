@@ -45,22 +45,28 @@ function drawNeedles(context, clock, hours, minutes, seconds)
 {
   print(hours + "-" + minutes + "-" + seconds);
 
+  // Hours to angle in radian
+  var start = Math.PI/2;
+  var hours_angle   = ((hours * 2 * Math.PI) / 12) - start;
+  var minutes_angle = ((minutes * 2 * Math.PI) / 60) - start;
+  var seconds_angle = ((seconds * 2 * Math.PI) / 60) - start;
+
   // Draw hours needle
   drawLine(context, clock.x, clock.y,
-           clock.x + xTrigonometricPosition(clock.radius, Math.PI/2),
-           clock.y + yTrigonometricPosition(clock.radius, Math.PI/2),
+           clock.x + xTrigonometricPosition(clock.radius, hours_angle),
+           clock.y + yTrigonometricPosition(clock.radius, hours_angle),
            clock.needle_hours_width, clock.needle_hours_color);
 
   // Draw minutes needle
   drawLine(context, clock.x, clock.y,
-           clock.x + xTrigonometricPosition(clock.radius, Math.PI/3),
-           clock.y + yTrigonometricPosition(clock.radius, Math.PI/3),
+           clock.x + xTrigonometricPosition(clock.radius, minutes_angle),
+           clock.y + yTrigonometricPosition(clock.radius, minutes_angle),
            clock.needle_minutes_width, clock.needle_minutes_color);
 
   // Draw seconds needle
   drawLine(context, clock.x, clock.y,
-           clock.x + xTrigonometricPosition(clock.radius, Math.PI),
-           clock.y + yTrigonometricPosition(clock.radius, Math.PI),
+           clock.x + xTrigonometricPosition(clock.radius, seconds_angle),
+           clock.y + yTrigonometricPosition(clock.radius, seconds_angle),
            clock.needle_seconds_width, clock.needle_seconds_color);
 }
 
@@ -100,7 +106,12 @@ function clock(context)
     var date = new Date;
     date.setTime( getTime() );
 
-    drawClock(context, clock, date.getHours(), date.getMinutes(), date.getSeconds());
+    // Always give hours between 0 and 12
+    var hours = date.getHours();
+    if(hours > 12)
+      hours -= 12;
+
+    drawClock(context, clock, hours, date.getMinutes(), date.getSeconds());
   }, 1000);
 }
 
