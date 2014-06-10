@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Javascript - Clock</title>
+
+    <link rel="stylesheet" type="text/css" href="/css/index.css">
+
+    <script type="text/javascript" src="/javascripts/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="/javascripts/menus.js"></script>
+
+    <script type="text/javascript" src="/javascripts/framework/main.js"></script>
+    <script type="text/javascript" src="/javascripts/framework/trigonometry.js"></script>
+    <script type="text/javascript" src="/javascripts/framework/draw.js"></script>
+    <script type="text/javascript" src="/javascripts/framework/time.js"></script>
+    <script type="text/javascript" src="/javascripts/pingpong/pingpong.js"></script>
+</head>
+
+<body>
+    <%= erb :menus %>
+    <div class="placeholder"><canvas id="pingpong" width="400px" height="500px"></canvas></div>
+
+    <script>
+      // Ping Pong
+      var pingpong_canvas_id = "pingpong";
+      var pingpong_canvas = $("#" + pingpong_canvas_id);
+      var pingpong_width  = pingpong_canvas.width();
+      var pingpong_height = pingpong_canvas.height();
+      pingpong( getContext(document.getElementById(pingpong_canvas_id)), pingpong_width, pingpong_height );
+    </script>
+</body>
+</html>

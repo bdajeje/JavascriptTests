@@ -1,0 +1,96 @@
+html, body
+{
+  height: 100%;
+  padding: 0px;
+  margin: 0px;
+}
+
+div, ul
+{
+  padding: 0px;
+  margin: 0px;
+}
+
+a
+{
+  cursor: pointer;
+  text-decoration: none;
+  color: #FFF;
+}
+
+a:hover
+{
+  color: #00CC00;
+}
+
+.placeholder
+{
+  float: left;
+}
+
+.top_menu
+{
+  float: left;
+  width: 10%;
+  border-right: 2px solid #111;
+  background-color: #222;
+  box-shadow: 1px 1px 10px #555;
+}
+
+.top_menu li
+{
+  color: #EEE;
+  font-weight: bold;
+  border-radius: 10px;
+  padding: 5px;
+  margin: 5px;
+}
+
+.child-menu li
+{
+  list-style-type: none;
+}
+
+.content
+{
+  padding-left: 10%;
+  /*background-color: #333;*/
+}
+
+.top_menu .icon
+{
+  background-repeat: no-repeat;
+  background-size: 20px 20px;
+  padding-left: 30px;
+  display: inline-block;
+  line-height: 20px;
+}
+
+.icon-home { background-image: url("images/icon-home.png"); }
+.icon-cpp { background-image: url("images/icon-cpp.png"); }
+.icon-linux { background-image: url("images/icon-linux.png"); }
+.icon-python { background-image: url("images/icon-python.png"); }
+.icon-javascript { background-image: url("images/icon-javascript.png"); }
+.icon-blog { background-image: url("images/icon-blog.png"); }
+
+.hidden
+{
+  display: none;
+}
+
+.footer
+{
+  background-color: #222;
+  padding: 10px;
+}
+
+.separator
+{
+  clear: both;
+}
+
+.footer .icon
+{
+  width: 30px;
+  height: 30px;
+}
